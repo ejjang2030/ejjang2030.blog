@@ -1,19 +1,79 @@
 import Header from "./Header";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {useState} from "react";
+import {app, auth, saveUserData} from "firebaseApp";
+import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+import {toast} from "react-toastify";
 
 export default function SignupForm() {
+  const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const navigate = useNavigate();
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      toast.success("회원가입이 완료되었습니다.");
+      navigate("/");
+    } catch (error: any) {
+      toast.error(error?.code);
+    }
+  };
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: {name, value},
+    } = e;
+    if (name === "email") {
+      setEmail(value);
+      const validRegex =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+      if (!value?.match(validRegex)) {
+        setError("이메일 형식이 올바르지 않습니다.");
+      } else {
+        setError("");
+      }
+    }
+    if (name === "password") {
+      setPassword(value);
+
+      if (value?.length < 8) {
+        setError("비밀번호는 8자리 이상으로 입력해주세요.");
+      } else if (passwordConfirm?.length > 0 && value !== passwordConfirm) {
+        setError("비밀번호와 비밀번호 확인 값이 다릅니다. 다시 확인해 주세요.");
+      } else {
+        setError("");
+      }
+    }
+    if (name === "password_confirm") {
+      setPasswordConfirm(value);
+
+      if (value?.length < 8) {
+        setError("비밀번호는 8자리 이상으로 입력해주세요.");
+      } else if (value !== password) {
+        setError("비밀번호와 비밀번호 확인 값이 다릅니다. 다시 확인해 주세요.");
+      } else {
+        setError("");
+      }
+    }
+  };
+
   return (
     <form
-      action='/post'
-      method='POST'
+      onSubmit={onSubmit}
       className='form form--lg'>
       <h1 className='form__title'>회원가입</h1>
       <div className='form__block'>
         <label htmlFor='userId'>아이디</label>
         <input
           type='email'
-          name='userId'
-          id='userId'
+          name='email'
+          id='email'
+          onChange={onChange}
           required
         />
       </div>
@@ -23,6 +83,7 @@ export default function SignupForm() {
           type='password'
           name='password'
           id='password'
+          onChange={onChange}
           required
         />
       </div>
@@ -32,9 +93,15 @@ export default function SignupForm() {
           type='password'
           name='password_confirm'
           id='password_confirm'
+          onChange={onChange}
           required
         />
       </div>
+      {error?.length > 0 && (
+        <div className='form__block'>
+          <div className='form__error'>{error}</div>
+        </div>
+      )}
       <div className='form__block'>
         계정이 이미 있으신가요?
         <Link
@@ -48,6 +115,7 @@ export default function SignupForm() {
           type='submit'
           value='회원가입'
           className='form__btn--submit'
+          disabled={error?.length > 0}
         />
       </div>
     </form>

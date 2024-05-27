@@ -8,9 +8,13 @@ import ProfilePage from "pages/profile";
 import LoginPage from "pages/login";
 import SignupPage from "pages/signup";
 import {useState} from "react";
+import KakaoRedirectHandler from "./KakaoRedirectHandler";
 
-export default function Router() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+interface RouterProps {
+  isAuthenticated: boolean;
+}
+
+export default function Router({isAuthenticated}: RouterProps) {
   return (
     <>
       <Routes>
@@ -41,14 +45,6 @@ export default function Router() {
               element={<ProfilePage />}
             />
             <Route
-              path='/login'
-              element={<LoginPage />}
-            />
-            <Route
-              path='/signup'
-              element={<SignupPage />}
-            />
-            <Route
               path='*'
               element={
                 <Navigate
@@ -67,6 +63,10 @@ export default function Router() {
             <Route
               path='/signup'
               element={<SignupPage />}
+            />
+            <Route
+              path='/oauth/kakao'
+              element={<KakaoRedirectHandler />}
             />
             <Route
               path='*'
