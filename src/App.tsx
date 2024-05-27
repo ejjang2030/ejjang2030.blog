@@ -18,6 +18,7 @@ function App() {
   );
   const [init, setInit] = useState<boolean>(false);
 
+  /* eslint-disable */
   useEffect(() => {
     if (!window.Kakao.isInitialized()) {
       window.Kakao.init(process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY);
