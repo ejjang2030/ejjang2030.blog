@@ -19,6 +19,9 @@ jobs:
       - name: Update lock file
         run: npm install
 
+      - name: CI
+        run: npm ci
+
       - name: Build
         run: npm run build
 
