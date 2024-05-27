@@ -2,23 +2,22 @@
 import React, {useContext, useEffect} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {
-  getAuth,
-  signInWithEmailAndPassword,
-  OAuthProvider,
-  signInWithCustomToken,
+  // getAuth,
+  // signInWithEmailAndPassword,
+  // OAuthProvider,
+  // signInWithCustomToken,
   signInWithRedirect,
   getRedirectResult,
-  getIdTokenResult,
+  // getIdTokenResult,
   createUserWithEmailAndPassword,
-  signInWithCredential,
-  signInWithPopup,
+  // signInWithCredential,
+  // signInWithPopup,
 } from "firebase/auth";
-import {app, auth, checkUserRegistration, db, kakaoProvider} from "firebaseApp";
+import {auth, db, kakaoProvider} from "firebaseApp";
 import post from "axios";
 import {toast} from "react-toastify";
 import {doc, setDoc} from "firebase/firestore";
 import AuthContext from "context/AuthContext";
-import {FirebaseError} from "firebase/app";
 
 const KakaoRedirectHandler = () => {
   const location = useLocation();
@@ -45,7 +44,7 @@ const KakaoRedirectHandler = () => {
       // 서버에 accessToken 전송
       if (!!data) {
         const accessToken = data.access_token;
-        const idToken = data.id_token;
+        // const idToken = data.id_token;
         const userRes = await post("https://kapi.kakao.com/v2/user/me", {
           params: {
             property_keys: ["kakao_account.email", "kakao_account.profile"],
@@ -85,7 +84,7 @@ const KakaoRedirectHandler = () => {
       console.log(error);
     }
   };
-
+  /* eslint-disable */
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const authCode = urlParams.get("code");

@@ -1,8 +1,8 @@
 import AuthContext from "context/AuthContext";
-import {getAuth, signOut} from "firebase/auth";
-import {app, auth} from "firebaseApp";
+import {signOut} from "firebase/auth";
+import {auth} from "firebaseApp";
 import {useContext} from "react";
-import {Link} from "react-router-dom";
+// import {Link} from "react-router-dom";
 import {toast} from "react-toastify";
 
 const onSignOut = async () => {

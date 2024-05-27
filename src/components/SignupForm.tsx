@@ -1,8 +1,7 @@
-import Header from "./Header";
 import {Link, useNavigate} from "react-router-dom";
 import {useState} from "react";
-import {app, auth, saveUserData} from "firebaseApp";
-import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+import {auth} from "firebaseApp";
+import {createUserWithEmailAndPassword} from "firebase/auth";
 import {toast} from "react-toastify";
 
 export default function SignupForm() {

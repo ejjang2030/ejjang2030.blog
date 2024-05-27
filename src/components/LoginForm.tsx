@@ -1,22 +1,20 @@
 import {
-  getAuth,
+  // getAuth,
   signInWithEmailAndPassword,
-  signInWithRedirect,
-  linkWithRedirect,
-  getRedirectResult,
-  OAuthProvider,
-  Auth,
-  UserCredential,
+  // signInWithRedirect,
+  // linkWithRedirect,
+  // getRedirectResult,
+  // OAuthProvider,
+  // Auth,
+  // UserCredential,
 } from "firebase/auth";
-import {app, auth, db} from "firebaseApp";
+import {auth} from "firebaseApp";
 import {Link, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
-import {useEffect, useState} from "react";
-import post from "axios";
-import {doc, setDoc} from "firebase/firestore";
+import {useState} from "react";
 
 export default function LoginForm() {
-  const provider = new OAuthProvider("oidc.kakao");
+  // const provider = new OAuthProvider("oidc.kakao");
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -59,23 +57,23 @@ export default function LoginForm() {
     }
   };
 
-  const getKakaoAccessToken = async (authCode: string) => {
-    const restApiKey = process.env.REACT_APP_REST_API_KEY;
-    const grantType = "authorizaition_code";
-    const redirectUri =
-      "https://ejjang2030-blog.firebaseapp.com/__/auth/handler";
-    const requestUri = `https://kauth.kakao.com/oauth/token?grant_type=${grantType}&client_id=${restApiKey}&redirect_uri=${redirectUri}&code=${authCode}`;
-    const {data} = await post(requestUri, {
-      headers: {
-        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-      },
-    });
-    // 서버에 accessToken 전송
-    if (!!data) {
-      const accessToken = data.access_token;
-      toast.success("accessToken : " + accessToken);
-    }
-  };
+  // const getKakaoAccessToken = async (authCode: string) => {
+  //   const restApiKey = process.env.REACT_APP_REST_API_KEY;
+  //   const grantType = "authorizaition_code";
+  //   const redirectUri =
+  //     "https://ejjang2030-blog.firebaseapp.com/__/auth/handler";
+  //   const requestUri = `https://kauth.kakao.com/oauth/token?grant_type=${grantType}&client_id=${restApiKey}&redirect_uri=${redirectUri}&code=${authCode}`;
+  //   const {data} = await post(requestUri, {
+  //     headers: {
+  //       "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+  //     },
+  //   });
+  //   // 서버에 accessToken 전송
+  //   if (!!data) {
+  //     const accessToken = data.access_token;
+  //     toast.success("accessToken : " + accessToken);
+  //   }
+  // };
 
   // const handleKakaoToFirebase = async (auth: Auth, accessToken: string) => {
   //   signInWithPopup(auth, provider)
@@ -96,16 +94,16 @@ export default function LoginForm() {
   //     });
   // };
 
-  const onKakaoLogin = async () => {
-    provider.setCustomParameters({
-      // client_id: `${process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY}`,
-      prompt: "consent",
-      response_type: "code",
-      scope: "openid profile email",
-      redirect_uri: "http://localhost:3000/oauth/kakao",
-    });
-    await signInWithRedirect(auth, provider);
-  };
+  // const onKakaoLogin = async () => {
+  //   provider.setCustomParameters({
+  //     // client_id: `${process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY}`,
+  //     prompt: "consent",
+  //     response_type: "code",
+  //     scope: "openid profile email",
+  //     redirect_uri: "http://localhost:3000/oauth/kakao",
+  //   });
+  //   await signInWithRedirect(auth, provider);
+  // };
 
   const kakaoLogin = () => {
     window.Kakao.Auth.authorize({

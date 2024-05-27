@@ -1,6 +1,6 @@
 import {ReactNode, createContext, useEffect, useState} from "react";
-import {User, getAuth, onAuthStateChanged} from "firebase/auth";
-import {app, auth} from "firebaseApp";
+import {User, onAuthStateChanged} from "firebase/auth";
+import {auth} from "firebaseApp";
 
 interface AuthProps {
   children: ReactNode;
@@ -13,6 +13,7 @@ const AuthContext = createContext({
 export const AuthContextProvider = ({children}: AuthProps) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
+  /* eslint-disable */
   useEffect(() => {
     onAuthStateChanged(auth, user => {
       if (user) {

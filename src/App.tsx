@@ -1,8 +1,8 @@
 import Router from "components/Router";
-import {app, auth, checkUserRegistration, saveUserData} from "firebaseApp";
+import {auth, checkUserRegistration, saveUserData} from "firebaseApp";
 import {useState, useEffect} from "react";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
-import {ToastContainer, toast} from "react-toastify";
+import {onAuthStateChanged} from "firebase/auth";
+import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "components/Loader";
 
