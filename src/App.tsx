@@ -1,11 +1,11 @@
 import Router from "components/Router";
 import {auth, checkUserRegistration, saveUserData} from "firebaseApp";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useContext} from "react";
 import {onAuthStateChanged} from "firebase/auth";
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "components/Loader";
-
+import ThemeContext from "context/ThemeContext";
 declare global {
   interface Window {
     Kakao: any;
@@ -17,6 +17,7 @@ function App() {
     !!auth?.currentUser
   );
   const [init, setInit] = useState<boolean>(false);
+  const context = useContext(ThemeContext);
 
   /* eslint-disable */
   useEffect(() => {
@@ -40,10 +41,10 @@ function App() {
   }, [auth]);
 
   return (
-    <>
+    <div className={context.theme === "light" ? "white" : "dark"}>
       <ToastContainer />
       {init ? <Router isAuthenticated={isAuthenticated} /> : <Loader />}
-    </>
+    </div>
   );
 }
 
