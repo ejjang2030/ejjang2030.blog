@@ -1,4 +1,9 @@
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent, FormEvent, useContext, useState} from "react";
+import {PostProps} from "./PostList";
+import {arrayUnion, doc, updateDoc} from "firebase/firestore";
+import {db} from "firebaseApp";
+import AuthContext from "context/AuthContext";
+import {toast} from "react-toastify";
 
 const COMMENTS = [
   {
@@ -33,8 +38,13 @@ const COMMENTS = [
   },
 ];
 
-export default function Comments() {
+interface CommentsProps {
+  post: PostProps;
+}
+
+export default function Comments({post}: CommentsProps) {
   const [comment, setComment] = useState("");
+  const {user} = useContext(AuthContext);
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const {
       target: {name, value},
@@ -44,9 +54,45 @@ export default function Comments() {
       setComment(value);
     }
   };
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (post && post.id) {
+      const postRef = doc(db, "posts", post.id);
+      if (user?.uid) {
+        const commentObj = {
+          content: comment,
+          uid: user.uid,
+          email: user.email,
+          createdAt: new Date()?.toLocaleDateString("ko", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
+        };
+        await updateDoc(postRef, {
+          comments: arrayUnion(commentObj),
+          updatedDated: new Date()?.toLocaleDateString("ko", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
+        });
+      }
+      toast.success("댓글을 작성하였습니다.");
+      setComment("");
+    }
+    try {
+    } catch (e: any) {
+      toast.error(e?.code);
+    }
+  };
+
   return (
     <div className='comments'>
-      <form className='comments__form'>
+      <form
+        className='comments__form'
+        onSubmit={onSubmit}>
         <div className='form__block'>
           <label htmlFor='comment'>댓글 입력</label>
           <textarea
